@@ -1,4 +1,11 @@
 const { user } = require("../lib/databaseConnection");
+const {
+  passwordMismatchException,
+} = require("../exceptions/passwordMismatchException");
+const {
+  alreadyExistsException,
+} = require("../exceptions/alreadyExistsException");
+const { notFoundException } = require("../exceptions/notFoundException");
 
 const bcrypt = require("bcrypt");
 
