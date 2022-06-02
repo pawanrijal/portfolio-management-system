@@ -6,15 +6,15 @@ require("dotenv").config();
 const PORT = process.env.PORT;
 
 const { sequelize } = require("./lib/databaseConnection");
-const HttpException = require("../exceptions/HttpException");
+const HttpException = require("./exceptions/HttpException");
 
 const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const { router } = require("./routes");
-// app.use(router);
+const { router } = require("./routes");
+app.use(router);
 
 //sequelize authentication to database
 sequelize
