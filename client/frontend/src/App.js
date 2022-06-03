@@ -1,7 +1,7 @@
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Stock from "./components/Stock";
+import Stock from "./components/AddStock";
 
 function App() {
   return (
