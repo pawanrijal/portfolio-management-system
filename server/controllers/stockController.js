@@ -1,4 +1,4 @@
-const StockSevice = require("../service/stockSevice");
+const StockSevice = require("../services/stockService");
 const successResponse = require("../utils/successResponse");
 
 class StockController {

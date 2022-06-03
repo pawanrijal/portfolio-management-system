@@ -11,7 +11,6 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
         required: true,
         allowNull: false,
-        unique: true,
       },
 
       //0 for buy and  1 for sell

@@ -21,7 +21,7 @@ app.use(router);
 sequelize
   .authenticate()
   .then(() => {
-    // sequelize.sync({ alter: true });
+    // sequelize.sync({ force: true });
     console.log("Database connected successfully");
   })
   .catch((err) => {

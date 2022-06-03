@@ -20,11 +20,18 @@ class StockService {
   }
 
   async update(payload, id) {
-    const returnData = await stock.update(payload, {
-      where: { id },
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
-    return returnData;
+    await this.findById(id);
+    const stockData = await stock.findOne({ where: { name: payload.name } });
+    console.log(stockData);
+    if (stockData === null) {
+      const returnData = await stock.update(payload, {
+        where: { id },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+      return returnData;
+    } else {
+      throw new alreadyExistsException("Stock with this name");
+    }
   }
 
   async findAll() {
@@ -37,7 +44,6 @@ class StockService {
   async findById(id) {
     const returnData = await stock.findOne({
       where: { id },
-      include: product,
       exclude: ["createdAt", "updatedAt"],
     });
     if (returnData === null) {
@@ -47,6 +53,7 @@ class StockService {
   }
   async delete(id) {
     {
+      await this.findById(id);
       const returnData = await stock.destroy({ where: { id } });
       return returnData;
     }
