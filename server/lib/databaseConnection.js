@@ -23,7 +23,13 @@ const sequelize = new Sequelize(DB_Name, DB_username, DB_password, {
 });
 
 const UserModel = User(sequelize, Sequelize.DataTypes);
+const StockMOdel = Stock(sequelize, Sequelize.DataTypes);
+
+//association
+StockMOdel.belongsTo(UserModel);
+UserModel.hasMany(StockMOdel);
 
 db.user = UserModel;
+db.stock = StockMOdel;
 db.sequelize = sequelize;
 module.exports = db;
