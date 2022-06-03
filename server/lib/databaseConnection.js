@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const User = require("../models/User");
+const Stock = require("../models/Stock");
 //DB SETTINGS
 const DB_Name = process.env.DB_Name;
 const DB_username = process.env.DB_Username;

@@ -31,8 +31,8 @@ class UserService {
   }
 
   async login(payload) {
-    const { username, password } = payload;
-    let _user = await user.findOne({ where: { username: username } });
+    const { email, password } = payload;
+    let _user = await user.findOne({ where: { email: email } });
     if (_user != null) {
       const compared = await bcrypt.compare(password, _user.password); //compare hashed password
       if (compared) {
