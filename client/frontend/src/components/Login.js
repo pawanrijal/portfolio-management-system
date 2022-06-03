@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { useState } from "react";
+import Card from "../UI/Card";
 
 import Alert from "./Alert";
 
@@ -34,39 +35,29 @@ export default function Login() {
   return (
     <>
       <Alert message={message} response={response} error={error} />
-
-      <div
-        className="d-flex justify-content-center"
-        style={{ marginTop: "100px" }}
-      >
-        <div className="card " style={{ width: "18rem" }}>
-          <div className="card-body">
-            <h5 className="card-title d-flex justify-content-center">Login</h5>
-
-            <div className="container">
-              <form className="" onSubmit={handleSubmit}>
-                <label className="">Enter email</label>
-                <input
-                  className="form-control"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                ></input>
-                <label className="">Enter Password</label>
-                <input
-                  className="form-control"
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                ></input>
-                <input type="submit" className="btn btn-success"></input>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Card title="Login">
+        <form className="" onSubmit={handleSubmit}>
+          <label className="">Enter email</label>
+          <input
+            className="form-control"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          ></input>
+          <label className="">Enter Password</label>
+          <input
+            className="form-control"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
+          <button type="submit" className="btn btn-success mt-3">
+            Login
+          </button>
+        </form>
+      </Card>
     </>
   );
 }
