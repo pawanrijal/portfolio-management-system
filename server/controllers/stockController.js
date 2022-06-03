@@ -5,7 +5,7 @@ class StockController {
   async create(req, res, next) {
     try {
       let data = await StockSevice.create(req.body);
-      successResponse(res, 400, data, "Menu Item Created");
+      successResponse(res, 400, data, "Stock Created");
     } catch (err) {
       next(err);
     }
@@ -15,9 +15,8 @@ class StockController {
     try {
       const { id } = req.params;
 
-      const token = req.headers.authorization.split(" ")[1];
-      const menuData = await StockSevice.update(req.body, id, token);
-      successResponse(res, 200, menuData, "Menu Item updated");
+      const menuData = await StockSevice.update(req.body, id);
+      successResponse(res, 200, menuData, "Stock updated");
     } catch (err) {
       next(err);
     }
@@ -26,7 +25,7 @@ class StockController {
   async findAll(req, res, next) {
     try {
       const menuData = await StockSevice.findAll();
-      successResponse(res, 200, menuData, "Menu Item fetched");
+      successResponse(res, 200, menuData, "Stock fetched");
     } catch (err) {
       next(err);
     }
@@ -36,7 +35,7 @@ class StockController {
     const id = req.params.id;
     try {
       const menuData = await StockSevice.findById(id);
-      successResponse(res, 200, menuData, "Menu Item fetched");
+      successResponse(res, 200, menuData, "Stock fetched");
     } catch (err) {
       next(err);
     }
@@ -45,8 +44,8 @@ class StockController {
   async delete(req, res, next) {
     const id = req.params.id;
     try {
-      let menuData = await StockSevice.delete(id, token);
-      successResponse(res, 200, menuData, "Menu Item Deleted");
+      let menuData = await StockSevice.delete(id);
+      successResponse(res, 200, menuData, "Stock Deleted");
     } catch (err) {
       next(err);
     }
