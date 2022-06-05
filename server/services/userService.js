@@ -1,4 +1,4 @@
-const { user } = require("../lib/databaseConnection");
+const { user, stockList } = require("../lib/databaseConnection");
 const {
   passwordMismatchException,
 } = require("../exceptions/passwordMismatchException");
@@ -8,6 +8,7 @@ const {
 const { notFoundException } = require("../exceptions/notFoundException");
 
 const bcrypt = require("bcrypt");
+const generateToken = require("../utils/tokenGenerator");
 
 class UserService {
   async create(payload) {
@@ -36,13 +37,22 @@ class UserService {
     if (_user != null) {
       const compared = await bcrypt.compare(password, _user.password); //compare hashed password
       if (compared) {
-        return true;
+        const token = generateToken(_user); //jwt token
+        return token;
       } else {
         throw new passwordMismatchException();
       }
     } else {
       throw new notFoundException("User");
     }
+  }
+  async profile(id) {
+    let _user = await user.findOne({
+      where: { id },
+      include: [stockList],
+      attributes: { exclude: ["password", "createdAt", "updatedAt", "id"] },
+    });
+    return _user;
   }
 }
 

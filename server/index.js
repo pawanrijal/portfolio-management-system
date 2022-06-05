@@ -16,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const { router } = require("./routes");
 app.use(router);
+const passport = require("passport");
+require("./utils/passportConfig")(passport);
 
 //sequelize authentication to database
 sequelize

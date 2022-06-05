@@ -1,37 +1,37 @@
 module.exports = (sequelize, type) => {
   return sequelize.define(
-    "users",
+    "stockslist",
     {
       id: {
         type: type.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
-      username: {
+      stockName: {
         type: type.STRING,
-        unique: true,
         required: true,
-      },
-      email: {
-        type: type.STRING,
-        unique: true,
         allowNull: false,
-        required: true,
       },
-      password: {
-        type: type.STRING,
-        allowNull: false,
-        required: true,
-      },
-      phone: {
-        type: type.STRING,
-        required: true,
-      },
-      //0 for user 1 for admin
-      roleId: {
+      //0 for buy and  1 for sell
+      type: {
         type: type.INTEGER,
         required: true,
-        default: 0,
+        allowNull: false,
+      },
+      quantity: {
+        type: type.INTEGER,
+        required: true,
+        allowNull: false,
+      },
+      price: {
+        type: type.FLOAT,
+        required: true,
+        allowNull: false,
+      },
+      transactionDate: {
+        type: type.DATE,
+        required: true,
+        allowNull: false,
       },
     },
     {

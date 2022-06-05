@@ -22,7 +22,6 @@ const Register = () => {
       phone: phone,
     };
 
-    console.log(request);
     axios
       .post("http://localhost:3001/register", request)
       .then((res) => {

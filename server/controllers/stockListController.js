@@ -1,10 +1,10 @@
-const stockService = require("../services/stockService");
+const StockSevice = require("../services/stockListService");
 const successResponse = require("../utils/successResponse");
 
 class StockListController {
   async create(req, res, next) {
     try {
-      let data = await stockService.create(req.body);
+      let data = await StockSevice.create(req.body);
       successResponse(res, 400, data, "Stock Added");
     } catch (err) {
       next(err);
@@ -15,7 +15,7 @@ class StockListController {
     try {
       const { id } = req.params;
 
-      const menuData = await stockService.update(req.body, id);
+      const menuData = await StockSevice.update(req.body, id);
       successResponse(res, 200, menuData, "Stock updated");
     } catch (err) {
       next(err);
@@ -24,7 +24,7 @@ class StockListController {
 
   async findAll(req, res, next) {
     try {
-      const menuData = await stockService.findAll();
+      const menuData = await StockSevice.findAll();
       successResponse(res, 200, menuData, "Stock fetched");
     } catch (err) {
       next(err);
@@ -34,7 +34,7 @@ class StockListController {
   async findById(req, res, next) {
     const id = req.params.id;
     try {
-      const menuData = await stockService.findById(id);
+      const menuData = await StockSevice.findById(id);
       successResponse(res, 200, menuData, "Stock fetched");
     } catch (err) {
       next(err);
@@ -44,7 +44,7 @@ class StockListController {
   async delete(req, res, next) {
     const id = req.params.id;
     try {
-      let menuData = await stockService.delete(id);
+      let menuData = await StockSevice.delete(id);
       successResponse(res, 200, menuData, "Stock Deleted");
     } catch (err) {
       next(err);

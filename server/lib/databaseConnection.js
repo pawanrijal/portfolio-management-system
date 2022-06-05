@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 const User = require("../models/User");
-const Stock = require("../models/Stock");
+const StockList = require("../models/StockList");
+const Stock = require("../models/stock");
 //DB SETTINGS
 const DB_Name = process.env.DB_Name;
 const DB_username = process.env.DB_Username;
@@ -23,13 +24,18 @@ const sequelize = new Sequelize(DB_Name, DB_username, DB_password, {
 });
 
 const UserModel = User(sequelize, Sequelize.DataTypes);
-const StockMOdel = Stock(sequelize, Sequelize.DataTypes);
+const StockListModel = StockList(sequelize, Sequelize.DataTypes);
+const StockModel = Stock(sequelize, Sequelize.DataTypes);
 
 //association
-StockMOdel.belongsTo(UserModel);
-UserModel.hasMany(StockMOdel);
+StockListModel.belongsTo(UserModel);
+UserModel.hasMany(StockListModel);
+
+StockListModel.belongsTo(StockModel);
+StockModel.hasMany(StockListModel);
 
 db.user = UserModel;
-db.stock = StockMOdel;
+db.stock = StockModel;
+db.stockList = StockListModel;
 db.sequelize = sequelize;
 module.exports = db;

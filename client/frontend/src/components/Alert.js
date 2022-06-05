@@ -3,11 +3,11 @@ export default function Alert(props) {
     <>
       {props.response ? (
         props.error ? (
-          <div class="alert alert-danger" role="alert">
+          <div className="alert alert-danger" role="alert">
             {props.message}
           </div>
         ) : (
-          <div class="alert alert-primary" role="alert">
+          <div className="alert alert-primary" role="alert">
             {props.message}
           </div>
         )

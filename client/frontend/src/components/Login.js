@@ -12,9 +12,9 @@ export default function Login() {
   const [response, setResponse] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
+    await axios
       .post("http://localhost:3001/login", {
         email: email,
         password: password,

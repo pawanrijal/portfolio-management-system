@@ -20,6 +20,17 @@ class UserController {
       next(err);
     }
   }
+
+  async profile(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = await UserService.profile(id);
+      successResponse(res, 200, data, "Profile");
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
 }
 
 module.exports = new UserController();

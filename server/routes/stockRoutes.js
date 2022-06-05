@@ -1,5 +1,5 @@
 const stockRouter = require("express").Router();
-const StockController = require("../controllers/stockController");
+const StockController = require("../controllers/StockController");
 
 stockRouter.post("/stock", StockController.create);
 stockRouter.get("/stock", StockController.findAll);
