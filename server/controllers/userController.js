@@ -23,7 +23,7 @@ class UserController {
 
   async profile(req, res, next) {
     try {
-      const { id } = req.params;
+      const id = req.id;
       const data = await UserService.profile(id);
       successResponse(res, 200, data, "Profile");
     } catch (err) {

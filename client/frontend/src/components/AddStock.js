@@ -1,8 +1,8 @@
 import Alert from "./Alert";
 import Dashboard from "./Dashboard";
-import stockList from "./StockList";
 import { useState, useEffect } from "react";
 import StockList from "./StockList";
+
 const axios = require("axios");
 
 const AddStock = () => {
@@ -17,18 +17,23 @@ const AddStock = () => {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState(false);
 
+  const [userStocks, setUserStocks] = useState([]);
+
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [stockData, setStockData] = useState([]);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
     let stk = [];
+    let userStock = [];
 
     axios
       .get("http://localhost:3001/stock")
       .then((result) => {
         const { data } = result;
-        console.log(data);
         data.data.forEach((element) => {
           stk.push(element.name);
         });
@@ -40,16 +45,64 @@ const AddStock = () => {
         console.log(err);
         setStock(null);
       });
+    function getCookie(name) {
+      var cookieArr = document.cookie.split(";");
+
+      for (var i = 0; i < cookieArr.length; i++) {
+        var cookiePair = cookieArr[i].split("=");
+
+        if (name == cookiePair[0].trim()) {
+          return decodeURIComponent(cookiePair[1]);
+        }
+      }
+
+      return null;
+    }
+
+    let token = getCookie("token");
+
+    let config = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
 
     axios
-      .get("http://localhost:3001/profile/1")
+      .get("http://localhost:3001/profile", config)
       .then((result) => {
-        console.log(result);
-        <StockList data={result} />;
+        const { data } = result;
+        data.data.stockslists.forEach((element) => {
+          userStock.push(element);
+        });
+
+        setUserStocks(userStock);
       })
       .catch((err) => {
-        console.log(err);
+        setResponse(true);
+        setError(true);
+        setMessage(err.response.data.message);
+        setLoggedIn(false);
       });
+    let stkData = [];
+
+    axios
+      .get("http://localhost:3001/dashboard", config)
+      .then((result) => {
+        const { data } = result;
+
+        // data.data.name.forEach((element) => stkName.push(element));
+        data.data.forEach((element) => {
+          stkData.push(element);
+        });
+      })
+      .catch((err) => {
+        setResponse(true);
+        setError(true);
+        setMessage(err.response.data.message);
+        setLoggedIn(false);
+      });
+
+    setStockData(stkData);
   };
 
   const onAdd = (e) => {
@@ -79,7 +132,7 @@ const AddStock = () => {
       });
   };
 
-  return (
+  return loggedIn ? (
     <>
       <Alert message={message} response={response} error={error} />
       <div
@@ -115,10 +168,10 @@ const AddStock = () => {
           <label>Type</label>
           <select
             style={{ marginLeft: "30px" }}
-            onChange={(e) => setType(type === "Buy" ? 0 : 1)}
+            onChange={(e) => setType(e.target.value)}
           >
-            <option value={type}>Buy</option>
-            <option value={type}>Sell</option>
+            <option value={0}>Buy</option>
+            <option value={1}>Sell</option>
           </select>
           <input
             placeholder="Enter quantity"
@@ -153,13 +206,32 @@ const AddStock = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-6">
-            <StockList />
+            <h1>Your Stocks</h1>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <StockList data={userStocks} />
+              </tbody>
+            </table>
           </div>
           <div className="col-md-6">
-            <Dashboard />
+            <Dashboard data={stockData} />
           </div>
         </div>
       </div>
+    </>
+  ) : (
+    <>
+      <Alert message={message} response={response} error={error} />
+      <h1>Unauthorized</h1>
     </>
   );
 };

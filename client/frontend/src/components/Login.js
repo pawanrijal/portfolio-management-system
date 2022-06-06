@@ -1,7 +1,8 @@
 import axios from "axios";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../UI/Card";
+import AddStock from "./AddStock";
 
 import Alert from "./Alert";
 
@@ -11,6 +12,41 @@ export default function Login() {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState(false);
   const [error, setError] = useState(false);
+
+  const [login, setLogin] = useState(false);
+
+  useEffect(() => {
+    function getCookie(name) {
+      var cookieArr = document.cookie.split(";");
+
+      for (var i = 0; i < cookieArr.length; i++) {
+        var cookiePair = cookieArr[i].split("=");
+
+        if (name == cookiePair[0].trim()) {
+          return decodeURIComponent(cookiePair[1]);
+        }
+      }
+
+      return null;
+    }
+
+    let token = getCookie("token");
+
+    let config = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    axios
+      .get("http://localhost:3001/profile", config)
+      .then((result) => {
+        setLogin(true);
+      })
+      .catch((err) => {
+        setLogin(false);
+      });
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,16 +59,20 @@ export default function Login() {
         setMessage(res.data.message);
         setResponse(true);
         setError(false);
+        setLogin(true);
         document.cookie = `token=${res.data.data};expires=Wed, 05 Aug 2022 23:00:00 UTC`;
       })
       .catch((err) => {
         setResponse(true);
         setMessage(err.response.data.message);
         setError(true);
+        setLogin(false);
       });
   };
 
-  return (
+  return login ? (
+    <AddStock />
+  ) : (
     <>
       <Alert message={message} response={response} error={error} />
       <Card title="Login">
