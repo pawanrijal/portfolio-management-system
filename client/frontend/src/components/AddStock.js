@@ -24,7 +24,7 @@ const AddStock = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [stock]);
 
   const fetchData = () => {
     let stk = [];
