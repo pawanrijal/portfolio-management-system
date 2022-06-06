@@ -9,6 +9,7 @@ class DashboardController {
       successResponse(res, 200, data, "dashboard fetched");
     } catch (err) {
       console.log(err);
+      next(err);
     }
   }
 }

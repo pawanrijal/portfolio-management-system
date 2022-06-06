@@ -1,8 +1,5 @@
 const { stockList, stock } = require("../lib/databaseConnection");
 
-const {
-  alreadyExistsException,
-} = require("../exceptions/alreadyExistsException");
 const { notFoundException } = require("../exceptions/notFoundException");
 
 class stockListService {

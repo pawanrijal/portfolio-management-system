@@ -26,12 +26,10 @@ const Register = () => {
       .post("http://localhost:3001/register", request)
       .then((res) => {
         setError(false);
-        console.log(res.status);
         setMessage(res.data.message);
         setResponse(true);
       })
       .catch((err) => {
-        console.log(err);
         setResponse(true);
         setError(true);
         setMessage(err.response.data.message);

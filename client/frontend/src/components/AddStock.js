@@ -51,7 +51,7 @@ const AddStock = () => {
       for (var i = 0; i < cookieArr.length; i++) {
         var cookiePair = cookieArr[i].split("=");
 
-        if (name == cookiePair[0].trim()) {
+        if (name === cookiePair[0].trim()) {
           return decodeURIComponent(cookiePair[1]);
         }
       }
@@ -120,12 +120,10 @@ const AddStock = () => {
       .post("http://localhost:3001/stockList", request)
       .then((res) => {
         setError(false);
-        console.log(res.status);
         setMessage(res.data.message);
         setResponse(true);
       })
       .catch((err) => {
-        console.log(err);
         setResponse(true);
         setError(true);
         setMessage(err.response.data.message);

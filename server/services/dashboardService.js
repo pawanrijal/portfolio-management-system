@@ -1,20 +1,16 @@
-const {
-  user,
-  stockList,
-  sequelize,
-  stock,
-} = require("../lib/databaseConnection");
+const { sequelize } = require("../lib/databaseConnection");
 
 const userService = require("./userService");
 const { QueryTypes } = require("sequelize");
-const { response } = require("express");
 
 class DashboardService {
   async dashboard(id) {
-    const _user = await userService.profile(id);
+    const _user = await userService.profile(id); //userdata
     let stockName = [];
-    const returnData = [];
+    const returnData = []; //for returning
     _user.stockslists.forEach((element) => stockName.push(element.stockName)); //adding stock name in array
+
+    //filter only unique values
     function onlyUnique(value, index, self) {
       return self.indexOf(value) === index;
     }
