@@ -21,86 +21,79 @@ const AddStock = () => {
 
   const [loggedIn, setLoggedIn] = useState(true);
   const [stockData, setStockData] = useState([]);
+  const [created, setCreated] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, [stock]);
+    stockFetchData();
+    profileFetchData();
+    DashboardFetchData();
+  }, [created]);
+  function getCookie(name) {
+    var cookieArr = document.cookie.split(";");
 
-  const fetchData = () => {
-    let stk = [];
-    let userStock = [];
+    for (var i = 0; i < cookieArr.length; i++) {
+      var cookiePair = cookieArr[i].split("=");
 
-    axios
-      .get("http://localhost:3001/stock")
-      .then((result) => {
-        const { data } = result;
-        data.data.forEach((element) => {
-          stk.push(element.name);
-        });
-
-        setStock(stk);
-        setStockName(stk[0]);
-      })
-      .catch((err) => {
-        console.log(err);
-        setStock(null);
-      });
-    function getCookie(name) {
-      var cookieArr = document.cookie.split(";");
-
-      for (var i = 0; i < cookieArr.length; i++) {
-        var cookiePair = cookieArr[i].split("=");
-
-        if (name === cookiePair[0].trim()) {
-          return decodeURIComponent(cookiePair[1]);
-        }
+      if (name === cookiePair[0].trim()) {
+        return decodeURIComponent(cookiePair[1]);
       }
-
-      return null;
     }
 
-    let token = getCookie("token");
+    return null;
+  }
+  let stk = [];
+  let userStock = [];
+  const stockFetchData = async () => {
+    const stockData = await axios.get("http://localhost:3001/stock");
+    console.log(stockData);
 
-    let config = {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+    let { data } = stockData;
+    data.data.forEach((element) => {
+      stk.push(element.name);
+    });
+    setStock(stk);
+    setStockName(stk[0]);
+  };
 
-    axios
-      .get("http://localhost:3001/profile", config)
-      .then((result) => {
-        const { data } = result;
-        data.data.stockslists.forEach((element) => {
-          userStock.push(element);
-        });
+  let token = getCookie("token");
 
-        setUserStocks(userStock);
-      })
-      .catch((err) => {
-        setResponse(true);
-        setError(true);
-        setMessage(err.response.data.message);
-        setLoggedIn(false);
-      });
-    let stkData = [];
+  let config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+  const profileFetchData = async () => {
+    const profile = await axios.get("http://localhost:3001/profile", config);
 
-    axios
-      .get("http://localhost:3001/dashboard", config)
-      .then((result) => {
-        const { data } = result;
+    let { data } = profile;
+    data.data.stockslists.forEach((element) => {
+      userStock.push(element);
+    });
 
-        // data.data.name.forEach((element) => stkName.push(element));
-        data.data.forEach((element) => {
-          stkData.push(element);
-        });
-      })
-      .catch((err) => {
-        setResponse(true);
-        setError(true);
-        setMessage(err.response.data.message);
-        setLoggedIn(false);
-      });
+    setUserStocks(userStock);
+  };
+
+  let stkData = [];
+
+  const DashboardFetchData = async () => {
+    const dashboardData = await axios.get(
+      "http://localhost:3001/dashboard",
+      config
+    );
+
+    const { data } = dashboardData;
+
+    // data.data.name.forEach((element) => stkName.push(element));
+    data.data.forEach((element) => {
+      stkData.push(element);
+    });
+
+    // .catch((err) => {
+    //   setResponse(true);
+    //   setError(true);
+    //   setMessage(err.response.data.message);
+    //   setLoggedIn(false);
+    // });
 
     setStockData(stkData);
   };
@@ -122,12 +115,14 @@ const AddStock = () => {
         setError(false);
         setMessage(res.data.message);
         setResponse(true);
+        setCreated(true);
       })
       .catch((err) => {
         setResponse(true);
         setError(true);
         setMessage(err.response.data.message);
       });
+    setCreated(false);
   };
 
   return loggedIn ? (
